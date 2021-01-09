@@ -6,6 +6,7 @@ const router = express.Router();
 
 const GCP_API_KEY = process.env.GCP_API_KEY;
 
+const geotab = require('../geotab-parking.json');
 
 router.get('/restaurants', findRestaurants, async (req, res) => {
 	res.send(res.locals.results);
@@ -43,8 +44,41 @@ async function findRestaurants(req, res, next) {
 		}
 	});
 	if (response.data) {
-	  res.locals.results = response.data.results.slice(0, 2);
-	  next();
+		// geotab stuff
+		// remove location if AvgTimeToPark
+		// is top 25% of city
+		const restaurants = response.data.results;
+		const numRestaurants = restaurants.length;
+
+		if (numRestaurants <= 2) {
+			res.locals.results = restaurants.slice(0, 2);
+		} else {
+			const maxRemovals = numRestaurants - 2;
+			let numRemoved = 0;
+			let newRestaurants = [];
+
+			for (let i = 0; i < numRestaurants && numRemoved < maxRemovals; i++) {
+				const latRes = restaurants[i].geometry.location.lat.toFixed(3);
+				const lngRes = restaurants[i].geometry.location.lng.toFixed(3);
+				let removed = false;
+
+				for (loc of geotab) {
+					if (loc.Latitude == latRes && loc.Longitude == lngRes) {
+						numRemoved++;
+						removed = true;
+						break
+					}
+				}
+
+				if (!removed) {
+					newRestaurants.push(restaurants[i]);
+				}
+			}
+
+			res.locals.results = newRestaurants.slice(0, 2)
+		}
+		
+	  	next();
 	}
 	else {
 		res.send('Something went wrong.');

@@ -42,3 +42,9 @@
             'maxPricePrefs' = [0, 2, 1];
         }
     * return example: [example-data.json](./example-data.json)
+
+# Geotab
+* Use top 25% AvgTimeToPark to remove restaurants with long parking times for people travelling in cars
+    * select Latitude, Longitude from UrbanInfrastructure.SearchingForParking where City = "Toronto" order by AvgTimeToPark limit 795;
+
+
