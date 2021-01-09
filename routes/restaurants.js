@@ -27,7 +27,10 @@ async function findRestaurants(req, res, next) {
 	/*
 	Places API Documentation: 
 		https://developers.google.com/maps/documentation/javascript/reference/places-service#FindPlaceFromQueryRequest
-		https://developers.google.com/places/web-service/search#PlaceSearchRequests 
+		https://developers.google.com/places/web-service/search#PlaceSearchRequests
+		https://developers.google.com/places/web-service/supported_types
+	Place Details API (for potentially including reviews): 
+		https://developers.google.com/places/web-service/details
 	*/
 	const response = await axios.get('https://maps.googleapis.com/maps/api/place/textsearch/json', { 
 		params: {
