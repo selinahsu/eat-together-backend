@@ -17,10 +17,10 @@
 * PUT: /profiles/:userId/:roomId/
     * add preferences in request body, example: 
     {
-	"pref": [
-		{"type": "cuisine", "string": "korean"},
-		{"type": "dietRes", "string": "vegan"}
-	]
+        "pref": [
+            {"type": "cuisine", "string": "korean"},
+            {"type": "dietRes", "string": "vegan"}
+        ]
     }
 ## Locations
 * GET: /locations/coordinates/:zipCode
