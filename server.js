@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-const restaurantRoutes = require('./routes/restaurants');
 
 const app = express();
 
@@ -18,9 +17,11 @@ const userRoutes = require('./routes/users');
 const roomRoutes = require('./routes/rooms');
 const profileRoutes = require('./routes/profiles');
 
-
 app.use(locationsRoutes); 
 app.use(restaurantRoutes); 
+app.use(userRoutes);
+app.use(roomRoutes);
+app.use(profileRoutes);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server started on port ${port}`));
