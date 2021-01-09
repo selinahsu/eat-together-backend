@@ -34,10 +34,8 @@ router.post('/locations/average', findAverageLocation, async (req, res) => {
 	res.send(res.locals.avgLocation);
 });
 
-async function findAverageLocation(req, res, next) {
-	console.log(req.body); //why is this emptyyyyy i'm just using fake data rn
-	
-	const locations = [{"lat":43,"lng":-79}, {"lat":80,"lng":-80}, {"lat":52,"lng":-60}]; // replace with req.body.data; 
+async function findAverageLocation(req, res, next) {	
+	const locations = req.body;
 	const locationCount = locations.length;
 
 	let latitudeSum = 0, longitudeSum = 0;
