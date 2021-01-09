@@ -13,17 +13,13 @@ router.get('/restaurants', findRestaurants, async (req, res) => {
 });
 
 async function findRestaurants(req, res, next) { 
-	const avgUserLocation = '43.6540, -79.3803'; // replace with req.body.params.location;
-	const radius = 200; // replace with req.body.params.radius;
-	
-	const dietaryPrefs = ['vegetarian', 'halal', 'dairy-free']; // replace with req.body.params.diet;
-	const cuisinePrefs = ['Chinese', 'Thai', 'Indian']; // replace with req.body.params.cuisineType;
-	const maxPricePrefs = [0, 2, 3, 1, 2, 1];
+	const avgUserLocation = req.body.avgUserLocation;
+	const radius = req.body.radius;
 
 	// Concatenated preferences:
-	const dietaryString = dietaryPrefs.join('+');
-	const cuisineString = cuisinePrefs.join('+');
-	const maxPrice = maxPricePrefs.reduce((a, b) => a + b, 0);
+	const dietaryString = req.body.dietaryPrefs.join('+');
+	const cuisineString = req.body.cuisinePrefs.join('+');
+	const maxPrice = req.body.maxPricePrefs.reduce((a, b) => a + b, 0);
 
 	/*
 	Places API Documentation: 
@@ -32,7 +28,7 @@ async function findRestaurants(req, res, next) {
 	*/
 	const response = await axios.get('https://maps.googleapis.com/maps/api/place/textsearch/json', { 
 		params: {
-			query: `${dietaryPrefs}+${cuisinePrefs}`,		// google search query
+			query: `${dietaryString}+${cuisineString}`,		// google search query
 			location: avgUserLocation,									// lat and long coordinates
 			radius: radius, 														// radius (in meters) to return results --> REMOVE IF USING RANKBY DISTANCE
 			type: 'restaurant',
