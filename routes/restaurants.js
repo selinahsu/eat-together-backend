@@ -13,17 +13,16 @@ router.get('/restaurants', findRestaurants, async (req, res) => {
 
 async function findRestaurants(req, res, next) { 
 	const avgUserLocation = '43.6540, -79.3803'; // replace with req.body.params.location;
-	const radius = 50; // replace with req.body.params.radius;
+	const radius = 200; // replace with req.body.params.radius;
 	
-	// Array of dietary preferences:
 	const dietaryPrefs = ['vegetarian', 'halal', 'dairy-free']; // replace with req.body.params.diet;
-	// Concatenated string of dietary preferences:
-	const dietaryString = dietaryPrefs.join('+');
-
-	// Array of cuisine preferences:
 	const cuisinePrefs = ['Chinese', 'Thai', 'Indian']; // replace with req.body.params.cuisineType;
-	// Concatenated string of cuisine preferences:
+	const maxPricePrefs = [0, 2, 3, 1, 2, 1];
+
+	// Concatenated preferences:
+	const dietaryString = dietaryPrefs.join('+');
 	const cuisineString = cuisinePrefs.join('+');
+	const maxPrice = maxPricePrefs.reduce((a, b) => a + b, 0);
 
 	/*
 	Places API Documentation: 
@@ -39,7 +38,7 @@ async function findRestaurants(req, res, next) {
 			rankby: 'prominence', 											// prominence is the default, distance is the other option
 			opennow: true,
 			minprice: 0,
-			maxprice: 3,
+			maxprice: maxPrice,
 			key: GCP_API_KEY
 		}
 	});
