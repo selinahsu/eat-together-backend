@@ -41,4 +41,8 @@
             'cuisinePrefs' = ['Chinese', 'Thai', 'Indian'],
             'maxPricePrefs' = [0, 2, 1];
         }
+<<<<<<< HEAD
     * return example: [example-data.json](./example-data.json)
+=======
+    * return example: [example-data.json](./example-data.json)
+>>>>>>> 8bb0c342dd199847430f39a5db6a5546df0020b4

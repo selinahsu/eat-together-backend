@@ -11,12 +11,13 @@ app.use(bodyParser.json());
 const cors = require('cors');
 const path = require('path');
 
+const locationsRoutes = require('./routes/locations');
 const restaurantRoutes = require('./routes/restaurants');
 const userRoutes = require('./routes/users');
 const roomRoutes = require('./routes/rooms');
 const profileRoutes = require('./routes/profiles');
 
-// use restaurantRoutes endpoints
+app.use(locationsRoutes); 
 app.use(restaurantRoutes); 
 app.use(userRoutes);
 app.use(roomRoutes);
