@@ -8,31 +8,42 @@ const GCP_API_KEY = process.env.GCP_API_KEY;
 
 const geotab = require('../geotab-parking.json');
 
+
+/*
+	Places API: 
+		https://developers.google.com/maps/documentation/javascript/reference/places-service#FindPlaceFromQueryRequest
+		https://developers.google.com/places/web-service/search#PlaceSearchRequests 
+	Place Details API (for reviews): 
+		https://developers.google.com/places/web-service/details
+*/
+
 router.get('/restaurants', findRestaurants, async (req, res) => {
 	res.send(res.locals.results);
 });
 
 async function findRestaurants(req, res, next) { 
 	const avgUserLocation = req.body.avgUserLocation;
-	const radius = req.body.radius;
 
-	// Concatenated preferences:
-	const dietaryString = req.body.dietaryPrefs.join('+');
-	const cuisineString = req.body.cuisinePrefs.join('+');
-	const maxPrice = req.body.maxPricePrefs.reduce((a, b) => a + b, 0);
+	// Concatenated strings for querying:
+	const dietaryPrefs = req.body.dietaryPrefs.join('+');
+	const cuisinePrefs = req.body.cuisinePrefs.join('+');
 
-	/*
-	Places API Documentation: 
-		https://developers.google.com/maps/documentation/javascript/reference/places-service#FindPlaceFromQueryRequest
-		https://developers.google.com/places/web-service/search#PlaceSearchRequests 
-	*/
+	// Set a maxPrice integer between 0 and 3 based on user preferences
+	const maxPrice = Math.floor((req.body.maxPricePrefs.reduce((a, b) => a + b, 0)) / (req.body.maxPricePrefs));
+
+	// If transport is by foot, shrink the radius to 500m
+	let radius = 3000; 
+	if (req.body.transport = 'foot') {
+		radius = 500; 
+	}
+
 	const response = await axios.get('https://maps.googleapis.com/maps/api/place/textsearch/json', { 
 		params: {
-			query: `${dietaryString}+${cuisineString}`,		// google search query
-			location: avgUserLocation,									// lat and long coordinates
-			radius: radius, 														// radius (in meters) to return results --> REMOVE IF USING RANKBY DISTANCE
+			query: `${dietaryPrefs}+${cuisinePrefs}`,		// google search query
+			location: avgUserLocation,						// lat and long coordinates
+			radius: radius, 								// radius (in meters) to return results --> REMOVE IF USING RANKBY DISTANCE
 			type: 'restaurant',
-			rankby: 'prominence', 											// prominence is the default, distance is the other option
+			rankby: 'prominence', 							// prominence is the default, distance is the other option
 			opennow: true,
 			minprice: 0,
 			maxprice: maxPrice,
