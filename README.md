@@ -35,11 +35,11 @@
     * returns two top restaurant picks based on all user preferences
     * request body example: 
         {
-            'avgUserLocation' = '43.6540, -79.3803',
-            'radius': 200,
-            'dietaryPrefs' = ['vegetarian', 'halal', 'dairy-free'],
-            'cuisinePrefs' = ['Chinese', 'Thai', 'Indian'],
-            'maxPricePrefs' = [0, 2, 1];
+            "avgUserLocation": "43.6540, -79.3803",
+            "radius": 200,
+            "dietaryPrefs": ["vegetarian", "halal", "dairy-free"],
+            "cuisinePrefs": ["Chinese", "Thai", "Indian"],
+            "maxPricePrefs": [0, 2, 1]
         }
     * return example: [example-data.json](./example-data.json)
 
