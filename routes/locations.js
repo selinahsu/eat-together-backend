@@ -26,7 +26,6 @@ async function getCoordinatesFromZipCode(req, res, next) {
 	else {
 		res.send('Something went wrong.');
 	}
-
 }
 
 
@@ -38,29 +37,21 @@ router.post('/locations/average', findAverageLocation, async (req, res) => {
 async function findAverageLocation(req, res, next) {
 	console.log(req.body); //why is this emptyyyyy i'm just using fake data rn
 	
-	// Array of coordinate objects:
 	const locations = [{"lat":43,"lng":-79}, {"lat":80,"lng":-80}, {"lat":52,"lng":-60}]; // replace with req.body.data; 
+	const locationCount = locations.length;
 
-	let coordinatesSum = locations.forEach(location => {
-		
-	})
-
-	// Sum of latitude coordinates: 
-	const latitudeSum = array.reduce(function(a, b){
-        return a + b;
-	}, 0);
+	let latitudeSum = 0, longitudeSum = 0;
+	locations.forEach((location) => {
+		latitudeSum += location.lat;
+		longitudeSum += location.lng;
+	});
 	
-	// Sum of longitude coordinates: 
-	const longitudeSum = array.reduce(function(a, b){
-        return a + b;
-	}, 0);
-	
-	// Save average location to res.locals:
+	// Save averaged location to res.locals:
+	res.locals.avgLocation = {
+		"lat": latitudeSum/locationCount,
+		"lng": longitudeSum/locationCount
+	};
 
-
-
-
-	
 	next();
 }
 
