@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const router = express.Router();
-const ObjectId = require('mongodb').ObjectId;
 
 const db = require("../db");
 const dbName = "data";
@@ -28,20 +27,20 @@ db.initialize(dbName, roomCollection, function(dbCollection) {
 
     // routes
     // get room, should pass in param for userId
-    router.get("/rooms/:id", (request, response) => {
-        const roomId = request.params.id;
+    router.get("/rooms/:id", (req, res) => {
+        const roomId = req.params.id;
 
         dbCollection.findOne({ _id: userId }, (error, result) => {
             if (error) throw error;
             // return item
-            response.json(result);
+            res.json(result);
         });
     });
 
     // generate room (host) should pass in param for userId
-    router.post("/rooms/:userId", (request, response) => {
+    router.post("/rooms/:userId", (req, res) => {
         const roomId = makeRoomCode(5);
-        const hostId = request.params.userId
+        const hostId = req.params.userId
 
         const room = {
             "roomId": roomId,
@@ -51,16 +50,16 @@ db.initialize(dbName, roomCollection, function(dbCollection) {
 
         dbCollection.insertOne(room, (error, result) => { // callback of insertOne
             if (error) throw error;
-            response.status(201).send(room)
+            res.status(201).send(room)
         });
     });
 
     // join room: /rooms/ABCDE/<userId> --> add user to room
     // finished adding preferences: /rooms/ABCDE/<userId>/true
-    router.put("/rooms/:roomId/:userId/:addPref?", (request, response) => {
-        const roomId = request.params.roomId;
-        const userId = request.params.userId;
-        const addPref = false || request.params.addPref;
+    router.put("/rooms/:roomId/:userId/:addPref?", (req, res) => {
+        const roomId = req.params.roomId;
+        const userId = req.params.userId;
+        const addPref = false || req.params.addPref;
 
         addPref ?
         dbCollection.updateOne(
@@ -69,7 +68,7 @@ db.initialize(dbName, roomCollection, function(dbCollection) {
             (error, result) => {
             if (error) throw error;
             // return item
-            response.json(result);
+            res.json(result);
         })
         :
         dbCollection.updateOne(
@@ -78,17 +77,17 @@ db.initialize(dbName, roomCollection, function(dbCollection) {
             (error, result) => {
             if (error) throw error;
             // return item
-            response.json(result);
+            res.json(result);
         });
     });
 
 
     // DEBUG, display all rooms
-    router.get("/rooms", (request, response) => {
+    router.get("/rooms", (req, res) => {
         // return updated list
         dbCollection.find().toArray((error, result) => {
             if (error) throw error;
-            response.json(result);
+            res.json(result);
         });
     });
 

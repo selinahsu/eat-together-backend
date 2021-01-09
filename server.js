@@ -16,6 +16,8 @@ const userRoutes = require('./routes/users');
 const roomRoutes = require('./routes/rooms');
 const profileRoutes = require('./routes/profiles');
 
+// use restaurantRoutes endpoints
+app.use(restaurantRoutes); 
 app.use(userRoutes);
 app.use(roomRoutes);
 app.use(profileRoutes);

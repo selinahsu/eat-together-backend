@@ -15,4 +15,10 @@
     * generate room, pass in userId, roomId, and true
     * join room, pass in userId, roomId
 * PUT: /profiles/:userId/:roomId/
-    * add preferences in request body, example: {"pref": ["sushi", "vegetarian", "chinese"]}
+    * add preferences in request body, example: 
+    {
+	"pref": [
+		{"type": "cuisine", "string": "korean"},
+		{"type": "dietRes", "string": "vegan"}
+	]
+    }
