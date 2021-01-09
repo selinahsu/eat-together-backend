@@ -1,17 +1,18 @@
 require('dotenv').config();
 const express = require('express');
 
-const server = express();
-const port = 3000;
+const app = express();
 
 const bodyParser = require('body-parser');
 const ObjectId = require('mongodb').ObjectId;
 
 // parse JSON (application/json content-type)
-server.use(bodyParser.json());
+app.use(bodyParser.json());
 
 const cors = require('cors');
 const path = require('path');
+
+const restaurantRoutes = require('./routes/restaurants');
 
 // db setup
 const db = require("./db");
@@ -27,7 +28,7 @@ db.initialize(dbName, userCollection, function(dbCollection) {
           console.log(result);
     });
 
-    server.post("/users", (request, response) => {
+    app.post("/users", (request, response) => {
         const user = request.body;
         dbCollection.insertOne(user, (error, result) => {
             if (error) throw error;
@@ -35,7 +36,7 @@ db.initialize(dbName, userCollection, function(dbCollection) {
         });
     });
 
-    server.get("/users/:id", (request, response) => {
+    app.get("/users/:id", (request, response) => {
         const userId = new ObjectId(request.params.id);
 
         dbCollection.findOne({ _id: userId }, (error, result) => {
@@ -71,7 +72,7 @@ db.initialize(dbName, roomCollection, function(dbCollection) {
 
     // routes
     // get room, should pass in param for userId
-    server.get("/rooms/:id", (request, response) => {
+    app.get("/rooms/:id", (request, response) => {
         const roomId = request.params.id;
 
         dbCollection.findOne({ _id: userId }, (error, result) => {
@@ -82,7 +83,7 @@ db.initialize(dbName, roomCollection, function(dbCollection) {
     });
 
     // generate room (host) should pass in param for userId
-    server.post("/rooms/:userId", (request, response) => {
+    app.post("/rooms/:userId", (request, response) => {
         const roomId = makeRoomCode(5);
         const hostId = request.params.userId
 
@@ -100,7 +101,7 @@ db.initialize(dbName, roomCollection, function(dbCollection) {
 
     // join room: /rooms/ABCDE/<userId> --> add user to room
     // finished adding preferences: /rooms/ABCDE/<userId>/true
-    server.put("/rooms/:roomId/:userId/:addPref?", (request, response) => {
+    app.put("/rooms/:roomId/:userId/:addPref?", (request, response) => {
         const roomId = request.params.roomId;
         const userId = request.params.userId;
         const addPref = false || request.params.addPref;
@@ -127,7 +128,7 @@ db.initialize(dbName, roomCollection, function(dbCollection) {
 
 
     // DEBUG, display all rooms
-    server.get("/rooms", (request, response) => {
+    app.get("/rooms", (request, response) => {
         // return updated list
         dbCollection.find().toArray((error, result) => {
             if (error) throw error;
@@ -154,7 +155,7 @@ db.initialize(dbName, profileCollection, function(dbCollection) {
 
     // generate room: after POST room, pass in userId, roomId, and true
     // join room: after PUT room, pass in userId and roomId
-    server.post("/profiles/:userId/:roomId/:isHost?", (request, response) => {
+    app.post("/profiles/:userId/:roomId/:isHost?", (request, response) => {
         const userId = request.params.userId;
         const roomId = request.params.roomId;
         const isHost = false || request.params.isHost;
@@ -173,7 +174,7 @@ db.initialize(dbName, profileCollection, function(dbCollection) {
         });
     });
 
-    server.put("/profiles/:userId/:roomId/", (request, response) => {
+    app.put("/profiles/:userId/:roomId/", (request, response) => {
         const roomId = request.params.roomId;
         const userId = request.params.userId;
         const pref = request.body.pref;
@@ -189,7 +190,7 @@ db.initialize(dbName, profileCollection, function(dbCollection) {
     });
 
     // DEBUG, see all profiles
-    server.get("/profiles", (request, response) => {
+    app.get("/profiles", (request, response) => {
         // return updated list
         dbCollection.find().toArray((error, result) => {
             if (error) throw error;
@@ -200,4 +201,4 @@ db.initialize(dbName, profileCollection, function(dbCollection) {
     throw (err);
 });
 
-server.listen(port, () => console.log(`Listening on port ${port}!`));
+app.listen(port, () => console.log(`Server started on port ${port}`));
