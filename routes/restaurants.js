@@ -17,7 +17,9 @@ const geotab = require('../geotab-parking.json');
 		https://developers.google.com/places/web-service/details
 */
 
-router.get('/restaurants', findRestaurants, async (req, res) => {
+
+/***************** Find the top 2 restaurants from user prefs *****************/
+router.post('/restaurants', findRestaurants, async (req, res) => {
 	res.send(res.locals.results);
 });
 
@@ -28,7 +30,7 @@ async function findRestaurants(req, res, next) {
 	const dietaryPrefs = req.body.dietaryPrefs.join('+');
 	const cuisinePrefs = req.body.cuisinePrefs.join('+');
 
-	// Set a maxPrice integer between 0 and 3 based on user preferences
+	// Set a maxPrice integer between 1 and 4 based on user preferences
 	const maxPrice = Math.floor((req.body.maxPricePrefs.reduce((a, b) => a + b, 0)) / (req.body.maxPricePrefs));
 
 	// If transport is by foot, shrink the radius to 500m
@@ -91,5 +93,31 @@ async function findRestaurants(req, res, next) {
 		res.send('Something went wrong.');
 	}
 }
+
+
+/***************** Get 5 reviews for a specific place *****************/
+router.get('/restaurants/review/:placeId', getReview, async (req, res) => {
+	res.send(res.locals.results);
+});
+
+async function getReview(req, res, next) {
+	const placeId = req.params.placeId;
+
+	const response = await axios.get('https://maps.googleapis.com/maps/api/place/details/json', { 
+		params: {
+			place_id: placeId,
+			fields: 'name,rating,price_level,reviews',
+			key: GCP_API_KEY
+		}
+	});
+	if (response.data) {
+		res.locals.results = response.data.result;
+		next();
+	}
+	else {
+		res.send('Something went wrong.');
+	}
+}
+
 
 module.exports = router;
