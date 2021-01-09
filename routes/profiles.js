@@ -21,7 +21,7 @@ function getImageUrl() {
 db.initialize(dbName, profileCollection, function(dbCollection) {
     dbCollection.find().toArray(function(err, result) {
         if (err) throw err;
-          console.log(result);
+          //console.log(result);
     });
 
     // generate room: after POST room, pass in userId, roomId, and true

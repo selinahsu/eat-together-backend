@@ -9,7 +9,7 @@ const userCollection = "user";
 db.initialize(dbName, userCollection, function(dbCollection) {
     dbCollection.find().toArray(function(err, result) {
         if (err) throw err;
-          console.log(result);
+          //console.log(result);
     });
 
     /* get ALL users */

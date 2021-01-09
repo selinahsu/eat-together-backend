@@ -17,8 +17,32 @@
 * PUT: /profiles/:userId/:roomId/
     * add preferences in request body, example: 
     {
-	"pref": [
-		{"type": "cuisine", "string": "korean"},
-		{"type": "dietRes", "string": "vegan"}
-	]
+        "pref": [
+            {"type": "cuisine", "string": "korean"},
+            {"type": "dietRes", "string": "vegan"}
+        ]
     }
+## Locations
+* GET: /locations/coordinates/:zipCode
+    * converts a zipCode to lat/long coordinates
+    * return example: {"lat":43.7458412,"lng":-79.3546521}
+* POST: /locations/average
+    * finds the central point between all user locations
+    * request body example: [{"lat":43,"lng":-79}, {"lat":80,"lng":-80}, {"lat":52,"lng":-60}]
+    * return example: {"lat":43.7458412,"lng":-79.3546521}
+## Restaurants
+* GET: /restaurants
+    * returns two top restaurant picks based on all user preferences
+    * request body example: 
+        {
+            'avgUserLocation' = '43.6540, -79.3803',
+            'radius': 200,
+            'dietaryPrefs' = ['vegetarian', 'halal', 'dairy-free'],
+            'cuisinePrefs' = ['Chinese', 'Thai', 'Indian'],
+            'maxPricePrefs' = [0, 2, 1];
+        }
+<<<<<<< HEAD
+    * return example: [example-data.json](./example-data.json)
+=======
+    * return example: [example-data.json](./example-data.json)
+>>>>>>> 8bb0c342dd199847430f39a5db6a5546df0020b4

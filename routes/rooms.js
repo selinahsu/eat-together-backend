@@ -22,7 +22,7 @@ db.initialize(dbName, roomCollection, function(dbCollection) {
     // get all items
     dbCollection.find().toArray(function(err, result) {
         if (err) throw err;
-          console.log(result);
+          //console.log(result);
     });
 
     // routes
