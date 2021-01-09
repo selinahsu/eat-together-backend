@@ -6,6 +6,11 @@ const router = express.Router();
 
 const GCP_API_KEY = process.env.GCP_API_KEY;
 
+/*
+Geocoding API Documentation: 
+	https://developers.google.com/maps/documentation/geocoding
+*/
+
 
 /***************** Convert a zip code to coordinates *****************/
 router.get('/locations/coordinates/:zipCode', getCoordinatesFromZipCode, async (req, res) => {
