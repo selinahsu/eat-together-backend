@@ -132,7 +132,7 @@ async function findRestaurants(req, res, next) {
 	// Set a maxPrice integer between 1 and 4 based on user preferences
 	const maxPrice = Math.floor((req.body.maxPricePrefs.reduce((a, b) => a + b, 0)) / (req.body.maxPricePrefs));
 
-	// If transport is by foot, shrink the radius to 500m
+	// If at least one person will be walking, shrink the radius to 500m
 	let radius = 3000; 
 	if (req.body.transport.includes('foot')) {
 		radius = 500; 
