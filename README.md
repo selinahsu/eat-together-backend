@@ -31,17 +31,23 @@
     * request body example: [{"lat":43,"lng":-79}, {"lat":80,"lng":-80}, {"lat":52,"lng":-60}]
     * return example: {"lat":43.7458412,"lng":-79.3546521}
 ## Restaurants
-* GET: /restaurants
-    * returns two top restaurant picks based on all user preferences
+* POST: /restaurants/:roomId
+    * returns all restaurant picks based on all user preferences
     * request body example: 
         {
             "avgUserLocation": "43.6540, -79.3803",
             "radius": 200,
             "dietaryPrefs": ["vegetarian", "halal", "dairy-free"],
             "cuisinePrefs": ["Chinese", "Thai", "Indian"],
-            "maxPricePrefs": [0, 2, 1]
+            "maxPricePrefs": [0, 2, 1],
+            "transport": ["car", "foot", "online"]
         }
     * return example: [example-data.json](./example-data.json)
+
+* GET: /restaurants/top2/:roomId
+    * returns top 2 restaurants with score, keys are "best" and "second"
+* PUT: /restaurants/:restaurantId/:roomId/:yes
+    * when someone votes for a restaurant (restaurantId is _id) 
 * GET: /restaurants/reviews/:placeId
     * returns the name, price_level, rating, and up to 5 reviews for a specified restaurant
     * placeId is a google-specific id (get it from calling '/restaurants')
