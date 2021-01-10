@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const path = require('path');
 
 const app = express();
 
@@ -9,7 +10,6 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
 const cors = require('cors');
-const path = require('path');
 
 const locationsRoutes = require('./routes/locations');
 const restaurantRoutes = require('./routes/restaurants');
@@ -24,7 +24,7 @@ app.use(roomRoutes);
 app.use(profileRoutes);
 
 app.get('/', (req, res) => {
-    res.send("hello world");
+    res.sendFile(path.join(__dirname + '/index.html'));
 }); 
 
 const port = process.env.PORT || 5000;
