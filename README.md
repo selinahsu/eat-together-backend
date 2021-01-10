@@ -40,13 +40,24 @@
             "dietaryPrefs": ["vegetarian", "halal", "dairy-free"],
             "cuisinePrefs": ["Chinese", "Thai", "Indian"],
             "maxPricePrefs": [0, 2, 1],
-            "transportationPrefs": ["car", "foot", "online"]
+            "transport": ["car", "foot", "online"]
         }
     * return example: [example-data.json](./example-data.json)
+
 * GET: /restaurants/top2/:roomId
     * returns top 2 restaurants with score, keys are "best" and "second"
 * PUT: /restaurants/:restaurantId/:roomId/:yes
     * when someone votes for a restaurant (restaurantId is _id) 
+* GET: /restaurants/reviews/:placeId
+    * returns the name, price_level, rating, and up to 5 reviews for a specified restaurant
+    * placeId is a google-specific id (get it from calling '/restaurants')
+    * return example: 
+        {
+            "name": "Little India Restaurant",
+            "price_level": 2,
+            "rating": 4,
+            "reviews": []
+        }
 
 # Geotab
 * Use top 25% AvgTimeToPark to remove restaurants with long parking times for people travelling in cars
