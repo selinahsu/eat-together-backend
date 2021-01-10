@@ -7,7 +7,6 @@ const db = require("../db");
 const dbName = "data";
 const restaurantCollection = "restaurant";
 
-
 const router = express.Router();
 
 const GCP_API_KEY = process.env.GCP_API_KEY;
@@ -32,7 +31,6 @@ db.initialize(dbName, restaurantCollection, function(dbCollection) {
 
 			dbCollection.insertOne(restaurant, (error, result) => {
 				if (error) throw error;
-				// res.status(201).send(profile)
 			});
 		}
 		res.send(res.locals.results);
@@ -55,6 +53,7 @@ db.initialize(dbName, restaurantCollection, function(dbCollection) {
 
 			for (let i = 0; i < restaurants.length; i++) {
 				const restaurant = restaurants[i];
+				// just in case we divide by 0 which shouldn't happen
 				let total = (restaurant.numYes + restaurant.numNo) == 0 ? 1 : (restaurant.numYes + restaurant.numNo)
 				let score = (restaurant.numYes / total) * 100
 				if (score > maxScore) {
@@ -104,11 +103,16 @@ db.initialize(dbName, restaurantCollection, function(dbCollection) {
 				res.json(result);
 			});
 		}
-    });
+	});
+	
+	/***************** Get 5 reviews for a specific place *****************/
+	router.get('/restaurants/review/:placeId', getReview, async (req, res) => {
+		res.send(res.locals.results);
+	});
 	
 }, function(err) {
     throw (err);
-
+});
 /*
 	Places API: 
 		https://developers.google.com/maps/documentation/javascript/reference/places-service#FindPlaceFromQueryRequest
@@ -133,8 +137,7 @@ async function findRestaurants(req, res, next) {
 	if (req.body.transport.includes('foot')) {
 		radius = 500; 
 	}
-  const driving = false || (req.body.transportationPrefs.includes('car'));
-
+  	const driving = false || (req.body.transportationPrefs.includes('car'));
 
 	const response = await axios.get('https://maps.googleapis.com/maps/api/place/textsearch/json', { 
 		params: {
@@ -149,6 +152,7 @@ async function findRestaurants(req, res, next) {
 			key: GCP_API_KEY
 		}
 	});
+
 	if (response.data) {
 		// geotab stuff
 		// remove location if AvgTimeToPark
@@ -194,11 +198,6 @@ async function findRestaurants(req, res, next) {
 }
 
 
-/***************** Get 5 reviews for a specific place *****************/
-router.get('/restaurants/review/:placeId', getReview, async (req, res) => {
-	res.send(res.locals.results);
-});
-
 async function getReview(req, res, next) {
 	const placeId = req.params.placeId;
 
@@ -217,6 +216,5 @@ async function getReview(req, res, next) {
 		res.send('Something went wrong.');
 	}
 }
-
 
 module.exports = router;
