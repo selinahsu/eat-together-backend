@@ -137,7 +137,7 @@ async function findRestaurants(req, res, next) {
 	if (req.body.transport.includes('foot')) {
 		radius = 500; 
 	}
-  	const driving = false || (req.body.transportationPrefs.includes('car'));
+  	const driving = false || (req.body.transport.includes('car'));
 
 	const response = await axios.get('https://maps.googleapis.com/maps/api/place/textsearch/json', { 
 		params: {
