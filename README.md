@@ -1,4 +1,6 @@
 # Endpoints
+https://eat-together-backend.herokuapp.com
+
 ## User
 * POST: /users
     * request body example: {"name": "John", "lat": 20.4555, "lon": -94.3243}
